@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* General Body Styling */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5; /* Lighter background */
+            color: #333;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #2c3e50 !important; /* Darker, professional navy */
+            color: white !important;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .navbar-brand,
+        .navbar-nav .nav-link,
+        .navbar-nav .nav-link strong,
+        .navbar-nav .nav-link span {
+            color: #ecf0f1 !important; /* Lighter text for contrast */
+            transition: color 0.3s ease;
+        }
+
+        .navbar-brand:hover,
+        .navbar-nav .nav-link:hover {
+            color: #ffffff !important; /* Pure white on hover */
+        }
+
+        /* Sidebar Styling */
+        .sidebar {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-right: 1px solid #e0e0e0;
+            height: calc(100vh - 65px); /* Adjust for fixed navbar */
+            position: fixed;
+            top: 65px; /* Aligned with navbar bottom */
+            left: 0;
+            width: 280px;
+            overflow-y: auto;
+            transition: width 0.3s ease;
+            z-index: 999; /* Below navbar */
+        }
+
+        .sidebar button {
+            margin-bottom: 15px;
+            width: 100%;
+            text-align: left;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 280px; /* Width of the sidebar */
+            padding: 20px;
+            padding-top: 85px; /* Adjust for fixed navbar + some spacing */
+            transition: margin-left 0.3s ease;
+            min-height: calc(100vh - 65px); /* Ensure it takes full height */
+        }
+
+        /* Container & Headings */
+        .container-fluid { /* Changed from .container to .container-fluid for sidebar layout */
+            padding: 0; /* Remove default container padding as sidebar handles left */
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #3498db; /* Accent underline */
+            padding-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        /* Button Styling */
+        .btn {
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+            padding: 10px 20px;
+        }
+
+        .btn-primary {
+            background-color: #3498db; /* Brighter blue */
+            border-color: #3498db;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:hover {
+            background-color: #2184c2;
+            border-color: #2184c2;
+            transform: translateY(-2px); /* Slight lift effect */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-info {
+            background-color: #1abc9c; /* Teal green */
+            border-color: #1abc9c;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-info:hover {
+            background-color: #159a7c;
+            border-color: #159a7c;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-success {
+            background-color: #2ecc71; /* Green */
+            border-color: #2ecc71;
+        }
+
+        .btn-success:hover {
+            background-color: #25a25a;
+            border-color: #25a25a;
+        }
+
+        .btn-danger {
+            background-color: #e74c3c; /* Red */
+            border-color: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+            border-color: #c0392b;
+        }
+
+        .btn-outline-danger {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        /* Card Styling */
+        .card {
+            border: none; /* Remove default border */
+            border-radius: 8px; /* More rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Softer, larger shadow */
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            background-color: #ffffff;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12); /* Enhanced hover shadow */
+            transform: translateY(-3px); /* Subtle lift */
+        }
+
+        .card-title {
+            color: #34495e; /* Darker card title */
+            margin-bottom: 20px;
+            font-size: 1.35rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card-title i {
+            margin-right: 10px;
+            color: #3498db; /* Icon color */
+        }
+
+        /* List/Table Styles */
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto; /* For responsiveness on small screens */
+        }
+        .user-list-table, .pending-students-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .user-list-table th, .user-list-table td,
+        .pending-students-table th, .pending-students-table td {
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            text-align: left;
+        }
+        .user-list-table thead th, .pending-students-table thead th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #555;
+        }
+        .user-list-table tbody tr:nth-child(even),
+        .pending-students-table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .user-list-table tbody tr:hover,
+        .pending-students-table tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap; /* Allow buttons to wrap */
+        }
+
+        /* Modal Styling */
+        .modal-content {
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .modal-header {
+            background-color: #3498db;
+            color: white;
+            border-bottom: none;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .modal-header .btn-close {
+            filter: invert(1); /* White close button */
+        }
+
+        .modal-title {
+            font-weight: 600;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
+        }
+
+        /* Section Visibility with Transitions */
+        .main-content-section {
+            background-color: #fff;
+            margin-bottom: 25px;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+
+        .main-content-section.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Specific for fee status list */
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-color: #eee;
+        }
+
+        .list-group-item:first-child {
+            border-top-left-radius: .3rem;
+            border-top-right-radius: .3rem;
+        }
+
+        .list-group-item:last-child {
+            border-bottom-left-radius: .3rem;
+            border-bottom-right-radius: .3rem;
+        }
+
+        .list-group-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        #fundBalance {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #27ae60; /* Green for balance */
+        }
+
+        /* Status buttons for users */
+        .user-status-buttons {
+            margin-top: 10px;
+            display: flex;
+            gap: 5px; /* Space between buttons */
+        }
+
+        /* For bulk upload form feedback */
+        .progress-bar {
+            width: 0%;
+            transition: width .6s ease;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="admin_dashboard.html">Admin Dashboard</a>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <span class="nav-link">
+                        <strong>User:</strong> <span id="userName"></span> (<span id="userRole"></span>)
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-outline-light ms-2" onclick="logout()">Logout</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-3 d-none d-md-block sidebar">
+                <div class="sidebar-sticky pt-3">
+                    <button class="btn btn-primary" id="userManagementBtn" onclick="showUserManagement()">
+                        <i class="fas fa-users-cog me-2"></i> User Management
+                    </button>
+                    <button class="btn btn-primary" id="bulkUploadStudentsBtn" onclick="showBulkUploadStudentsModal()">
+                        <i class="fas fa-upload me-2"></i> Bulk Upload Students
+                    </button>
+                    <button class="btn btn-info" id="studentFeeStatusBtn" onclick="showStudentFeeStatus()">
+                        <i class="fas fa-money-bill-alt me-2"></i> Student Fee Status
+                    </button>
+                    <button class="btn btn-warning" id="pendingApprovalsBtn" onclick="showPendingApprovals()">
+                        <i class="fas fa-user-clock me-2"></i> Pending Student Approvals
+                        <span id="pendingApprovalCount" class="badge bg-danger ms-2" style="display:none;">0</span>
+                    </button>
+                </div>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto main-content">
+                <h2>Admin Dashboard</h2>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-coins me-2"></i> Fund Balance</h5>
+                        <p class="card-text">₹<span id="fundBalance">Loading...</span></p>
+                    </div>
+                </div>
+
+                <div id="userManagementSection" class="main-content-section">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-users-cog me-2"></i> User Management</h5>
+                            <button class="btn btn-success btn-sm float-end" onclick="showCreateUserForm()">
+                                <i class="fas fa-user-plus me-2"></i> Create User
+                            </button>
+                            <div id="usersList" class="mt-3 table-container">
+                                <p>Loading users...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="studentFeeStatusSection" class="main-content-section">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-money-bill-alt me-2"></i> Student Fee Status</h5>
+                            <div id="studentFeeStatusContent" class="mt-3">
+                                <p>Loading student fee status...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pendingApprovalsSection" class="main-content-section">
+                    <div class="card w-100">
+                        <div class="card-body">
+                            <h5 class="card-title"><i class="fas fa-user-clock me-2"></i> Pending Student Approvals</h5>
+                            <div id="pendingStudentsList" class="mt-3 table-container">
+                                <p>No pending students found.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createUserModalLabel">Create New User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="createUserForm">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="role" class="form-label">Role</label>
+                            <select class="form-select" id="role" required>
+                                <option value="student" selected>Student</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="prn" class="form-label">PRN (for students)</label>
+                            <input type="text" class="form-control" id="prn" placeholder="Optional">
+                        </div>
+                         <div class="mb-3">
+                            <label for="department" class="form-label">Department (for students)</label>
+                            <input type="text" class="form-control" id="department" placeholder="Optional">
+                        </div>
+                        <div class="mb-3">
+                            <label for="year" class="form-label">Year (for students)</label>
+                            <input type="text" class="form-control" id="year" placeholder="Optional">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="createUserForm">Create User</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <input type="hidden" id="editUserId">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editEmail" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRole" class="form-label">Role</label>
+                            <select class="form-select" id="editRole" required>
+                                <option value="student">Student</option>
+                                <option value="teacher">Teacher</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPrn" class="form-label">PRN (for students)</label>
+                            <input type="text" class="form-control" id="editPrn" placeholder="Optional">
+                        </div>
+                         <div class="mb-3">
+                            <label for="editDepartment" class="form-label">Department (for students)</label>
+                            <input type="text" class="form-control" id="editDepartment" placeholder="Optional">
+                        </div>
+                        <div class="mb-3">
+                            <label for="editYear" class="form-label">Year (for students)</label>
+                            <input type="text" class="form-control" id="editYear" placeholder="Optional">
+                        </div>
+                        </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="editUserForm" onclick="updateUser()">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="bulkUploadStudentsModal" tabindex="-1" aria-labelledby="bulkUploadStudentsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="bulkUploadStudentsModalLabel">Bulk Upload Students</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Upload an Excel (.xlsx, .xls) or CSV file containing student data. The file must have the following columns in the first row (case-insensitive):</p>
+                    <ul>
+                        <li>**Name**</li>
+                        <li>**Email**</li>
+                        <li>**PRN**</li>
+                        <li>**Department**</li>
+                        <li>**Year**</li>
+                        <li>**Password**</li> </ul>
+                    <p>
+                        <a href="student_template_with_password.xlsx" download="student_template_with_password.xlsx" class="btn btn-outline-success btn-sm">
+                            <i class="fas fa-download me-2"></i> Download Sample Template (with Password column)
+                        </a>
+                    </p>
+                    <form id="bulkUploadForm">
+                        <div class="mb-3">
+                            <label for="studentExcelFile" class="form-label">Choose File:</label>
+                            <input type="file" class="form-control" id="studentExcelFile" accept=".xlsx, .xls, .csv" required>
+                        </div>
+                        <div class="progress mb-3" style="display: none;">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+                        </div>
+                        <div id="bulkUploadFeedback" class="mt-3"></div>
+                        <button type="submit" class="btn btn-primary w-100 mt-3"><i class="fas fa-upload me-2"></i> Upload Students</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Get references to main content sections
+        const userManagementSection = document.getElementById('userManagementSection');
+        const studentFeeStatusSection = document.getElementById('studentFeeStatusSection');
+        const pendingApprovalsSection = document.getElementById('pendingApprovalsSection'); // NEW
+
+        const fundBalanceElement = document.getElementById('fundBalance');
+        const userNameElement = document.getElementById('userName');
+        const userRoleElement = document.getElementById('userRole');
+
+        // Divs where content will be loaded
+        const usersListDiv = document.getElementById('usersList');
+        const studentFeeStatusContentDiv = document.getElementById('studentFeeStatusContent');
+        const pendingStudentsListDiv = document.getElementById('pendingStudentsList'); // NEW
+
+        // Other elements
+        const createUserForm = document.getElementById('createUserForm');
+        const pendingApprovalCountBadge = document.getElementById('pendingApprovalCount'); // NEW
+
+        // These need to be declared globally (or at least before use)
+        // Moved up for better scope management
+        let createUserModal;
+        let editUserModal;
+        let bulkUploadStudentsModal; // New modal instance
+        let authHeader = ''; // Initialize authHeader here
+
+        // ====================================================================
+        // ALL JAVASCRIPT FUNCTION DEFINITIONS SHOULD GO HERE (BEFORE event listeners)
+        // ====================================================================
+
+        /**
+         * Hides all main content sections and shows the selected one.
+         * @param {HTMLElement} sectionElement The element of the section to show.
+         */
+        function showSection(sectionElement) {
+            const allSections = document.querySelectorAll('.main-content-section');
+            allSections.forEach(sec => {
+                sec.classList.remove('show');
+                sec.style.display = 'none';
+            });
+
+            if (sectionElement) {
+                sectionElement.style.display = 'block';
+                sectionElement.classList.add('show');
+            }
+        }
+
+        /**
+         * Shows the User Management section and loads users.
+         */
+        function showUserManagement() {
+            showSection(userManagementSection);
+            loadUsers(); // Load all users
+        }
+
+        /**
+         * Shows the Student Fee Status section and loads fee data.
+         */
+        function showStudentFeeStatus() {
+            showSection(studentFeeStatusSection);
+            loadStudentFeeStatus(); // Load comprehensive fee status
+        }
+
+        /**
+         * Shows the Pending Student Approvals section and loads only pending students.
+         */
+        async function showPendingApprovals() {
+            showSection(pendingApprovalsSection);
+            await loadPendingStudentsForApproval(); // Load specific pending students
+        }
+
+        /**
+         * Shows the Create User modal.
+         */
+        function showCreateUserForm() {
+            createUserForm.reset(); // Clear previous values in the form
+            createUserModal.show();
+        }
+
+        /**
+         * Shows the Bulk Upload Students modal.
+         */
+        function showBulkUploadStudentsModal() {
+            // Get elements here as they are scoped to the modal's HTML
+            const bulkUploadForm = document.getElementById('bulkUploadForm');
+            const bulkUploadFeedback = document.getElementById('bulkUploadFeedback');
+            const progressBarContainer = bulkUploadForm.querySelector('.progress');
+            const progressBar = bulkUploadForm.querySelector('.progress-bar');
+
+            bulkUploadForm.reset(); // Clear form
+            bulkUploadFeedback.innerHTML = ''; // Clear feedback
+            progressBarContainer.style.display = 'none'; // Hide progress bar
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+            bulkUploadStudentsModal.show();
+        }
+
+
+        /**
+         * Checks if the user is authenticated and is an admin.
+         * If not, redirects to the login page.
+         * @returns {boolean} True if authenticated as admin, false otherwise.
+         */
+        function checkAuthentication() {
+            const userToken = localStorage.getItem('userToken');
+            const currentUserStr = localStorage.getItem('currentUser');
+
+            if (!userToken || !currentUserStr) {
+                console.warn('Authentication details not found in localStorage. Redirecting to login.');
+                alert('Authentication details not found. Please log in.');
+                logout(); // This already handles redirection
+                return false;
+            }
+
+            let currentUser;
+            try {
+                currentUser = JSON.parse(currentUserStr);
+            } catch (e) {
+                console.error("Error parsing currentUser from localStorage:", e);
+                alert('Invalid user data. Please log in again.');
+                logout();
+                return false;
+            }
+
+            if (currentUser.role !== 'admin') {
+                console.warn('User role is not admin. Unauthorized access attempt. Redirecting to login.');
+                alert('Unauthorized access. Please log in as an administrator.');
+                logout();
+                return false;
+            }
+
+            authHeader = 'Bearer ' + userToken;
+            console.log('admin_dashboard.html: Authentication check successful. Auth header set with token.');
+            return true;
+        }
+
+        /**
+         * Clears local storage and redirects to the login page.
+         */
+        function logout() {
+            localStorage.removeItem('userToken'); // Ensure userToken is cleared
+            localStorage.removeItem('currentUser');
+            console.log('User logged out. Redirecting to index.html');
+            window.location.href = 'index.html';
+        }
+
+        /**
+         * Fetches and displays the current user's name and role in the navbar.
+         */
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('api.php?action=get_user_info', {
+                    headers: { 'Authorization': authHeader }
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    userNameElement.textContent = user.name;
+                    userRoleElement.textContent = user.role;
+                    console.log('User info loaded:', user.name, user.role);
+                } else {
+                    const errorData = await response.json();
+                    console.error('Failed to load user info:', response.status, errorData.error);
+                    alert('Failed to load user info: ' + (errorData.error || 'Unknown error'));
+                    if (response.status === 401 || response.status === 403) logout();
+                }
+            } catch (error) {
+                console.error('Error loading user info:', error);
+                alert('An error occurred while loading user information. Check console for details.');
+                logout();
+            }
+        }
+
+        /**
+         * Fetches and displays all ACTIVE users (students, teachers, admins) in the user management section.
+         * Denied and Pending students are excluded.
+         */
+        async function loadUsers() {
+            usersListDiv.innerHTML = '<p>Loading active users...</p>';
+            try {
+                const response = await fetch('api.php?action=get_all_users', {
+                    headers: { 'Authorization': authHeader }
+                });
+
+                if (response.ok) {
+                    const allUsers = await response.json();
+                    // Filter to only include active users
+                    const activeUsers = allUsers.filter(user => user.status === 'active');
+                    usersListDiv.innerHTML = ''; // Clear loading message
+
+                    if (activeUsers && activeUsers.length > 0) {
+                        let tableHTML = `
+                            <table class="table user-list-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>PRN</th>
+                                        <th>Dept/Year</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+                        activeUsers.forEach((user, index) => {
+                            tableHTML += `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${user.name}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.role}</td>
+                                    <td>${user.prn || 'N/A'}</td>
+                                    <td>${user.department || 'N/A'}${user.year ? '/' + user.year : ''}</td>
+                                    <td class="action-buttons">
+                                        <button class="btn btn-primary btn-sm" onclick="showEditUserModal(${user.user_id})"><i class="fas fa-edit"></i> Edit</button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteUser(${user.user_id})"><i class="fas fa-trash-alt"></i> Delete</button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        tableHTML += `
+                                </tbody>
+                            </table>
+                        `;
+                        usersListDiv.innerHTML = tableHTML;
+                    } else {
+                        usersListDiv.innerHTML = '<p>No active users found.</p>';
+                    }
+                } else {
+                    const errorData = await response.json();
+                    console.error('Failed to load users:', response.status, errorData.error);
+                    usersListDiv.innerHTML = `<p class="text-danger">Failed to load users: ${errorData.error || 'Unknown error'}.</p>`;
+                    if (response.status === 401 || response.status === 403) logout();
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                usersListDiv.innerHTML = '<p class="text-danger">Error loading users.</p>';
+                alert('An error occurred while loading users. Check console for details.');
+            }
+        }
+
+        /**
+         * Fetches and displays only students with 'pending' status for approval.
+         */
+        async function loadPendingStudentsForApproval() {
+            pendingStudentsListDiv.innerHTML = '<p>Loading pending students...</p>';
+            try {
+                const response = await fetch('api.php?action=get_all_users', { // Reusing get_all_users
+                    headers: { 'Authorization': authHeader }
+                });
+
+                if (response.ok) {
+                    const allUsers = await response.json();
+                    const pendingStudents = allUsers.filter(user => user.role === 'student' && user.status === 'pending');
+
+                    pendingStudentsListDiv.innerHTML = ''; // Clear loading message
+                    console.log('Pending students loaded:', pendingStudents);
+
+                    // Update badge count
+                    if (pendingStudents.length > 0) {
+                        pendingApprovalCountBadge.textContent = pendingStudents.length;
+                        pendingApprovalCountBadge.style.display = 'inline-block'; // Show badge
+                    } else {
+                        pendingApprovalCountBadge.style.display = 'none'; // Hide badge
+                    }
+
+                    if (pendingStudents && pendingStudents.length > 0) {
+                        let tableHTML = `
+                            <table class="table pending-students-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>PRN</th>
+                                        <th>Dept/Year</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        `;
+                        pendingStudents.forEach((user, index) => {
+                            tableHTML += `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td>${user.name}</td>
+                                    <td>${user.email}</td>
+                                    <td>${user.prn || 'N/A'}</td>
+                                    <td>${user.department || 'N/A'}${user.year ? '/' + user.year : ''}</td>
+                                    <td class="action-buttons">
+                                        <button class="btn btn-success btn-sm" onclick="updateStudentStatus(${user.user_id}, 'active')">Accept</button>
+                                        <button class="btn btn-danger btn-sm" onclick="updateStudentStatus(${user.user_id}, 'denied')">Deny</button>
+                                    </td>
+                                </tr>
+                            `;
+                        });
+                        tableHTML += `
+                                </tbody>
+                            </table>
+                        `;
+                        pendingStudentsListDiv.innerHTML = tableHTML;
+                    } else {
+                        pendingStudentsListDiv.innerHTML = '<p>No pending student approvals found.</p>';
+                    }
+                } else {
+                    const errorData = await response.json();
+                    console.error('Failed to load pending students:', response.status, errorData.error);
+                    pendingStudentsListDiv.innerHTML = `<p class="text-danger">Failed to load pending students: ${errorData.error || 'Unknown error'}.</p>`;
+                    if (response.status === 401 || response.status === 403) logout();
+                }
+            } catch (error) {
+                console.error('Error loading pending students:', error);
+                pendingStudentsListDiv.innerHTML = '<p class="text-danger">Error loading pending students.</p>';
+                alert('An error occurred while loading pending students. Check console for details.');
+            }
+        }
+
+
+        /**
+         * Updates a student's status (active/denied).
+         * @param {number} userId The ID of the student to update.
+         * @param {string} status The new status ('active' or 'denied').
+         */
+        async function updateStudentStatus(userId, status) {
+            if (!confirm(`Are you sure you want to change this student's status to '${status}'?`)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('api.php?action=update_student_status', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': authHeader,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ user_id: userId, status: status })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message);
+                    // After updating status, reload relevant lists
+                    loadUsers(); // Always reload the main user list to reflect the status change
+                    loadPendingStudentsForApproval(); // Update pending badge/list
+                    loadStudentFeeStatus(); // In case status affects fee views
+                    console.log(`Student ${userId} status updated to ${status}.`);
+                } else {
+                    const errorData = await response.json();
+                    alert('Error updating student status: ' + (errorData.error || 'Something went wrong'));
+                    console.error('Error updating student status:', response.status, errorData);
+                    if (response.status === 401 || response.status === 403) logout();
+                }
+            } catch (error) {
+                console.error('Error updating student status:', error);
+                alert('Error updating student status: ' + error.message);
+            }
+        }
+
+
+        /**
+         * Fetches and displays the fund balance.
+         */
+        async function loadFundBalance() {
+            fundBalanceElement.textContent = 'Loading...';
+            try {
+                const response = await fetch('api.php?action=get_fund_balance', {
+                    headers: { 'Authorization': authHeader }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Assuming 'total_balance' is the key for the total fund balance
+                    fundBalanceElement.textContent = parseFloat(data.total_balance).toFixed(2);
+                    console.log('Fund balance loaded:', data.total_balance);
+                } else {
+                    const errorData = await response.json();
+                    console.error('Failed to load fund balance:', response.status, errorData.error);
+                    fundBalanceElement.textContent = 'Error';
+                    alert('Failed to load fund balance: ' + (errorData.error || 'Unknown error'));
+                    if (response.status === 401 || response.status === 403) logout();
+                }
+            } catch (error) {
+                console.error('Error loading fund balance:', error);
+                fundBalanceElement.textContent = 'Error';
+                alert('An error occurred while loading fund balance. Check console for details.');
+            }
+        }
+
+        /**
+         * Fetches and displays the student fee status (paid vs. pending) in the main content.
+         */
+        async function loadStudentFeeStatus() {
+            studentFeeStatusContentDiv.innerHTML = '<p>Loading student fee status...</p>'; // Show loading state in main content
+            try {
+                const response = await fetch('api.php?action=get_student_fee_status', {
+                    headers: { 'Authorization': authHeader }
+                });
+
+                if (response.ok) {
+                    const data = await response.json(); // API returns: {students_with_pending_fees, total_active_students, pending_students_details}
+                    studentFeeStatusContentDiv.innerHTML = ''; // Clear loading message
+                    console.log('Student fee status loaded:', data);
+
+                    const studentsFeeStatusDetails = data.pending_students_details || []; // Array of students with their paid/pending amounts
+
+                    const paidStudents = studentsFeeStatusDetails.filter(student => parseFloat(student.total_paid_amount) > 0);
+                    const pendingStudents = studentsFeeStatusDetails.filter(student => parseFloat(student.total_pending_amount) > 0);
+
+
+                    // Display Paid Students with Serial Numbers and PRN
+                    if (paidStudents.length > 0) {
+                        const paidTitle = document.createElement('h6');
+                        paidTitle.className = 'mt-3 mb-2 text-success';
+                        paidTitle.textContent = 'Paid Students';
+                        studentFeeStatusContentDiv.appendChild(paidTitle);
+
+                        const paidList = document.createElement('ol');
+                        paidList.className = 'list-group list-group-flush';
+                        paidStudents.forEach((student, index) => {
+                            const listItem = document.createElement('li');
+                            listItem.className = 'list-group-item';
+                            // Added PRN here
+                            listItem.innerHTML = `<strong>${index + 1}.</strong> ${student.student_name || 'N/A'} (PRN: ${student.prn || 'N/A'}) <span class="text-muted">(Paid: ₹${parseFloat(student.total_paid_amount).toFixed(2)})</span>`;
+                            paidList.appendChild(listItem);
+                        });
+                        studentFeeStatusContentDiv.appendChild(paidList);
+                    } else {
+                        const noPaidMessage = document.createElement('p');
+                        noPaidMessage.className = 'mt-3 text-muted';
+                        noPaidMessage.textContent = 'No students have paid yet.';
+                        studentFeeStatusContentDiv.appendChild(noPaidMessage);
+                    }
+
+                    // Display Pending Students with Serial Numbers and PRN
+                    if (pendingStudents.length > 0) {
+                        const pendingTitle = document.createElement('h6');
+                        pendingTitle.className = 'mt-4 mb-2 text-danger';
+                        pendingTitle.textContent = 'Pending Students';
+                        studentFeeStatusContentDiv.appendChild(pendingTitle);
+
+                        const pendingList = document.createElement('ol');
+                        pendingList.className = 'list-group list-group-flush';
+                        pendingStudents.forEach((student, index) => {
+                            const listItem = document.createElement('li');
+                            listItem.className = 'list-group-item';
+                            // Added PRN here
+                            listItem.innerHTML = `<strong>${index + 1}.</strong> ${student.student_name || 'N/A'} (PRN: ${student.prn || 'N/A'}) <span class="text-danger">(Pending: ₹${parseFloat(student.total_pending_amount).toFixed(2)})</span>`;
+                            pendingList.appendChild(listItem);
+                        });
+                        studentFeeStatusContentDiv.appendChild(pendingList);
+                    } else {
+                        const noPendingMessage = document.createElement('p');
+                        noPendingMessage.className = 'mt-3 text-muted';
+                        noPendingMessage.textContent = 'No students have any pending fees.';
+                        studentFeeStatusContentDiv.appendChild(noPendingMessage);
+                    }
+
+                } else {
+                    const errorData = await response.json();
+                    console.error('Failed to load student fee status:', response.status, errorData.error);
+                    studentFeeStatusContentDiv.innerHTML = `<p class="text-danger">Failed to load student fee status: ${errorData.error || 'Unknown error'}.</p>`;
+                    if (response.status === 401 || response.status === 403) logout();
+                }
+            } catch (error) {
+                console.error('Error loading student fee status:', error);
+                studentFeeStatusContentDiv.innerHTML = '<p class="text-danger">Error loading student fee status.</p>';
+                alert('An error occurred while loading student fee status. Check console for details.');
+            }
+        }
+
+        /**
+         * Handles the creation of a new user.
+         */
+        async function createUser() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const passwordInput = document.getElementById('password').value;
+            const role = document.getElementById('role').value;
+            const prn = document.getElementById('prn').value.trim() || null;
+            const department = document.getElementById('department').value.trim() || null;
+            const year = document.getElementById('year').value.trim() || null;
+
+
+            if (!name || !email || !passwordInput || !role) {
+                alert('Please fill in all required fields (Name, Email, Password, Role).');
+                return;
+            }
+
+            // Client-side validation for student-specific fields
+            if (role === 'student') {
+                if (!prn || !department || !year) {
+                    alert('For student role, PRN, Department, and Year are required.');
+                    return;
+                }
+            }
+
+
+            try {
+                const response = await fetch('api.php?action=create_user', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': authHeader,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name, email, password: passwordInput, role, prn, department, year })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message);
+                    createUserModal.hide();
+                    createUserForm.reset(); // Clear the form
+                    loadUsers(); // Reload user list
+                    if (role === 'student') { // If a student was created, update relevant lists
+                        loadStudentFeeStatus();
+                        loadPendingStudentsForApproval();
+                    }
+                    console.log('User created successfully:', data.message);
+                } else {
+                    const errorData = await response.json();
+                    alert('Error creating user: ' + (errorData.error || 'Something went wrong'));
+                    console.error('Error creating user:', response.status, errorData);
+                    if (response.status === 401 || response.status === 403) logout();
+                }
+            } catch (error) {
+                console.error('Error creating user:', error);
+                alert('Error creating user: ' + error.message);
+            }
+        }
+
+        /**
+         * Opens the edit user modal and pre-fills it with user data.
+         * @param {number} userId The ID of the user to edit.
+         */
+        function showEditUserModal(userId) {
+            const editNameInput = document.getElementById('editName');
+            const editEmailInput = document.getElementById('editEmail');
+            const editRoleSelect = document.getElementById('editRole');
+            const editPrnInput = document.getElementById('editPrn');
+            const editDepartmentInput = document.getElementById('editDepartment');
+            const editYearInput = document.getElementById('editYear');
+            // editStatusSelect no longer needed as it's removed from modal
+
+            fetch(`api.php?action=get_user&user_id=${userId}`, {
+                headers: { 'Authorization': authHeader }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) logout();
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(user => {
+                document.getElementById('editUserId').value = user.user_id;
+                editNameInput.value = user.name;
+                editEmailInput.value = user.email;
+                editRoleSelect.value = user.role;
+                editPrnInput.value = user.prn || '';
+                editDepartmentInput.value = user.department || '';
+                editYearInput.value = user.year || '';
+                editUserModal.show();
+                console.log('Editing user:', user);
+            })
+            .catch(error => {
+                console.error('Error fetching user details for edit:', error);
+                alert('Error fetching user details. Check console for details.');
+            });
+        }
+
+        /**
+         * Handles the update of an existing user.
+         */
+        async function updateUser() {
+            const userId = document.getElementById('editUserId').value;
+            const newName = document.getElementById('editName').value;
+            const newEmail = document.getElementById('editEmail').value;
+            const newRole = document.getElementById('editRole').value;
+            const newPrn = document.getElementById('editPrn').value.trim() || null;
+            const newDepartment = document.getElementById('editDepartment').value.trim() || null;
+            const newYear = document.getElementById('editYear').value.trim() || null;
+
+            if (!newName || !newEmail || !newRole) {
+                alert('Please fill in all required fields (Name, Email, Role).');
+                return;
+            }
+
+            // Client-side validation for student-specific fields on update
+            if (newRole === 'student') {
+                if (!newPrn || !newDepartment || !newYear) {
+                    alert('For student role, PRN, Department, and Year are required.');
+                    return;
+                }
+            }
+
+            try {
+                const response = await fetch('api.php?action=update_user', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': authHeader,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        name: newName,
+                        email: newEmail,
+                        role: newRole,
+                        prn: newPrn,
+                        department: newDepartment,
+                        year: newYear
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    alert(data.message);
+                    editUserModal.hide();
+                    loadUsers(); // Reload user list
+                    loadStudentFeeStatus(); // Reload fee status (if role changed)
+                    loadPendingStudentsForApproval(); // Update pending list
+                    console.log('User updated successfully:', data.message);
+                } else {
+                    const errorData = await response.json();
+                    alert('Error updating user: ' + (errorData.error || 'Something went wrong'));
+                    console.error('Error updating user:', response.status, errorData);
+                    if (response.status === 401 || response.status === 403) logout();
+                }
+            } catch (error) {
+                console.error('Error updating user:', error);
+                alert('Error updating user: ' + error.message);
+            }
+        }
+
+        /**
+         * Deletes a user after confirmation.
+         * @param {number} userId The ID of the user to delete.
+         */
+        async function deleteUser(userId) {
+            if (confirm('Are you sure you want to delete this user? This action cannot be undone.')) {
+                try {
+                    const response = await fetch(`api.php?action=delete_user&user_id=${userId}`, {
+                        method: 'GET', // Assuming your API uses GET for delete
+                        headers: { 'Authorization': authHeader }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        alert(data.message);
+                        loadUsers(); // Reload user list
+                        loadStudentFeeStatus(); // Reload fee status after user deletion
+                        loadPendingStudentsForApproval(); // Update pending badge/list
+                        console.log('User deleted successfully:', data.message);
+                    } else {
+                        const errorData = await response.json();
+                        alert('Error deleting user: ' + (errorData.error || 'Something went wrong'));
+                        console.error('Error deleting user:', response.status, errorData);
+                        if (response.status === 401 || response.status === 403) logout();
+                    }
+                } catch (error) {
+                    console.error('Error deleting user:', error);
+                    alert('Error deleting user: ' + error.message);
+                }
+            }
+        }
+
+        // --- NEW: Handle Bulk Student Upload ---
+        async function handleBulkStudentUpload(event) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('studentExcelFile');
+            const file = fileInput.files[0];
+
+            // Ensure these DOM elements are obtained correctly,
+            // they were previously defined inside the function.
+            // It's better to declare them globally if used multiple times,
+            // or ensure they are scoped correctly.
+            const bulkUploadFeedback = document.getElementById('bulkUploadFeedback');
+            const progressBarContainer = document.querySelector('#bulkUploadForm .progress'); // Use querySelector with parent to be safe
+            const progressBar = document.querySelector('#bulkUploadForm .progress-bar');
+
+
+            console.log('handleBulkStudentUpload: Function started.');
+            console.log('handleBulkStudentUpload: File selected:', file ? file.name : 'No file selected');
+            console.log('handleBulkStudentUpload: authHeader value:', authHeader);
+
+
+            if (!file) {
+                bulkUploadFeedback.innerHTML = '<div class="alert alert-danger">Please select a file to upload.</div>';
+                console.error('handleBulkStudentUpload: No file selected, returning.');
+                return;
+            }
+
+            if (!authHeader) {
+                bulkUploadFeedback.innerHTML = '<div class="alert alert-danger">Authentication token missing. Please log out and log in again.</div>';
+                console.error('handleBulkStudentUpload: AuthHeader is empty, cannot send request.');
+                logout(); // Redirect if no token
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('student_file', file);
+
+            bulkUploadFeedback.innerHTML = ''; // Clear previous feedback
+            progressBarContainer.style.display = 'block'; // Show progress bar
+            progressBar.style.width = '0%';
+            progressBar.textContent = '0%';
+
+            try {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', 'api.php?action=bulk_upload_students', true);
+                xhr.setRequestHeader('Authorization', authHeader); // Set Authorization header
+
+                console.log('handleBulkStudentUpload: XHR request opened and headers set. Sending formData...');
+
+                xhr.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        const percentComplete = (e.loaded / e.total) * 100;
+                        progressBar.style.width = percentComplete.toFixed(0) + '%';
+                        progressBar.textContent = percentComplete.toFixed(0) + '%';
+                    }
+                };
+
+                xhr.onload = function() {
+                    progressBar.style.width = '100%';
+                    progressBar.textContent = '100%';
+
+                    console.log('handleBulkStudentUpload: XHR onload triggered. Status:', xhr.status);
+                    console.log('handleBulkStudentUpload: XHR responseText:', xhr.responseText);
+
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        const data = JSON.parse(xhr.responseText);
+                        let feedbackHTML = '';
+                        if (data.success_count > 0) {
+                            feedbackHTML += `<div class="alert alert-success">Successfully uploaded ${data.success_count} students!</div>`;
+                        }
+                        if (data.failed_students && data.failed_students.length > 0) {
+                            feedbackHTML += `<div class="alert alert-warning">Some students failed to import:</div>`;
+                            feedbackHTML += `<ul class="list-group">`;
+                            data.failed_students.forEach(student => {
+                                feedbackHTML += `<li class="list-group-item text-danger">Row ${student.row}: ${student.name || student.email || student.prn || 'N/A'} - ${student.errors.join(', ')}</li>`;
+                            });
+                            feedbackHTML += `</ul>`;
+                        }
+                        bulkUploadFeedback.innerHTML = feedbackHTML;
+                        loadUsers(); // Refresh user list
+                        loadPendingStudentsForApproval(); // Refresh pending list
+                        loadStudentFeeStatus(); // Refresh fee status
+                    } else {
+                        console.error('handleBulkStudentUpload: XHR request failed with status', xhr.status, xhr.responseText);
+                        try {
+                            const errorData = JSON.parse(xhr.responseText);
+                            bulkUploadFeedback.innerHTML = `<div class="alert alert-danger">Error: ${errorData.error || 'Unknown error during upload.'}</div>`;
+                            console.error('Bulk upload failed:', xhr.status, errorData);
+                        } catch (e) {
+                            bulkUploadFeedback.innerHTML = `<div class="alert alert-danger">Error: Server returned invalid JSON or empty response. Status: ${xhr.status}</div>`;
+                            console.error('Bulk upload failed: Invalid JSON response', xhr.responseText);
+                        }
+                        if (xhr.status === 401 || xhr.status === 403) logout();
+                    }
+                    progressBarContainer.style.display = 'none'; // Hide progress bar after completion
+                };
+
+                xhr.onerror = function() {
+                    console.error('handleBulkStudentUpload: XHR onerror triggered. Network error.');
+                    bulkUploadFeedback.innerHTML = '<div class="alert alert-danger">Network error during upload. Please try again.</div>';
+                    console.error('Bulk upload network error.');
+                    progressBarContainer.style.display = 'none'; // Hide progress bar on error
+                };
+
+                xhr.send(formData);
+
+            } catch (error) {
+                console.error('handleBulkStudentUpload: Caught JavaScript error in try-catch block:', error);
+                bulkUploadFeedback.innerHTML = `<div class="alert alert-danger">An unexpected error occurred: ${error.message}</div>`;
+                progressBarContainer.style.display = 'none'; // Hide progress bar on error
+            }
+        }
+
+
+        // ====================================================================
+        // EVENT LISTENERS AND INITIAL PAGE LOAD LOGIC GO HERE
+        // ====================================================================
+        window.addEventListener('load', function() {
+            const createUserModalElement = document.getElementById('createUserModal');
+            const editUserModalElement = document.getElementById('editUserModal');
+            const bulkUploadStudentsModalElement = document.getElementById('bulkUploadStudentsModal');
+            createUserModal = new bootstrap.Modal(createUserModalElement);
+            editUserModal = new bootstrap.Modal(editUserModalElement);
+            bulkUploadStudentsModal = new bootstrap.Modal(bulkUploadStudentsModalElement);
+
+            // Perform authentication check immediately
+            if (checkAuthentication()) {
+                console.log('Admin dashboard initialization: Authentication successful.');
+                loadUserInfo();
+                loadFundBalance();
+                loadPendingStudentsForApproval();
+
+                // Default to showing User Management section on load
+                showUserManagement();
+            } else {
+                console.warn('Admin dashboard initialization: Authentication failed. Redirection handled by checkAuthentication.');
+                return;
+            }
+
+            // Attach submit listener to create user form
+            const createForm = document.getElementById('createUserForm');
+            if (createForm) {
+                createForm.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    console.log("Create User form submitted via JS event listener.");
+                    await createUser();
+                });
+            }
+
+            // Attach submit listener to edit user form
+            const editForm = document.getElementById('editUserForm');
+            if (editForm) {
+                editForm.addEventListener('submit', async function(event) {
+                    event.preventDefault();
+                    console.log("Edit User form submitted via JS event listener.");
+                    await updateUser();
+                });
+            }
+
+            // Attach submit listener for bulk upload form
+            const bulkUploadFormElement = document.getElementById('bulkUploadForm');
+            if (bulkUploadFormElement) {
+                bulkUploadFormElement.addEventListener('submit', handleBulkStudentUpload);
+            } else {
+                console.error('Element with ID "bulkUploadForm" not found. Bulk upload functionality will not work.');
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

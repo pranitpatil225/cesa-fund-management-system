@@ -1,0 +1,337 @@
+/* styles.css */
+
+/* --- General Body Styles (keep existing) --- */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f7f6; /* Your existing light background */
+    color: #333;
+}
+
+/* --- Login Page Specific Styles --- */
+
+/* Body for the login page - makes it full height and centers content */
+.login-body {
+    /* Override general body background if you want a different one for login */
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* A vibrant gradient for the login screen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Ensure it takes full viewport height */
+    margin: 0; /* Remove default body margin */
+}
+
+/* Styling for the login card (the main login form container) */
+.login-card {
+    max-width: 450px; /* Optimal width for a login form */
+    width: 100%; /* Ensure it's responsive within its max-width */
+    border-radius: 15px; /* Softer rounded corners for a modern feel */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Deeper shadow for elevation */
+    background-color: #fff; /* White background for the card */
+    padding: 40px; /* More padding inside the card */
+    animation: fadeIn 0.8s ease-out; /* Subtle fade-in animation */
+    /* Ensure it's above any potential background overlays */
+    position: relative;
+    z-index: 10;
+}
+
+.login-card h2 {
+    color: #007bff; /* Keep your primary blue for the heading */
+    margin-bottom: 25px; /* More space below heading */
+    font-weight: 700; /* Bolder heading */
+    border-bottom: none; /* Remove the border from here, if desired for a cleaner look */
+    padding-bottom: 0;
+}
+
+.login-card .form-label {
+    font-weight: 600; /* Bolder labels */
+    color: #555;
+    margin-bottom: 8px; /* Space between label and input */
+}
+
+.login-card .form-control {
+    border-radius: 8px; /* Slightly more rounded input fields */
+    border: 1px solid #ced4da; /* A standard, slightly lighter border */
+    padding: 12px 18px; /* More generous padding inside inputs */
+    font-size: 1.05rem; /* Slightly larger font for readability */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-card .form-control:focus {
+    border-color: #007bff; /* Highlight with primary blue on focus */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Subtle shadow on focus */
+}
+
+.login-card .btn-primary {
+    background-color: #007bff; /* Your primary blue */
+    border-color: #007bff;
+    border-radius: 8px; /* Consistent rounded corners */
+    font-weight: 600;
+    padding: 12px 0; /* Full-width button, good vertical padding */
+    font-size: 1.1rem; /* Slightly larger text for the button */
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.login-card .btn-primary:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    border-color: #0056b3;
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow on hover */
+}
+
+.login-card .alert-danger {
+    border-radius: 8px; /* Match card and input border-radius */
+    font-size: 0.95rem;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+/* Forgot Password link styling */
+.login-card .text-muted {
+    color: #6c757d !important; /* Bootstrap's muted color */
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.login-card .text-muted:hover {
+    color: #007bff !important; /* Change to primary blue on hover */
+    text-decoration: underline !important;
+}
+
+/* Animation for the login card */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* --- Existing Styles (ensure they follow or are organized logically) --- */
+/* (Keep all your other existing .navbar, .container, .card, .btn, etc. styles below these login-specific ones) */
+
+.navbar {
+    background-color: #f8f9fa !important;
+    color: #333 !important;
+    padding: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff !important;
+}
+.navbar-text {
+    color: black !important;
+}
+
+.btn-outline-danger {
+    color: red !important;
+    border-color: #dc3545 !important;
+}
+
+.btn-outline-danger:hover {
+    background-color: #dc3545 !important;
+    color: white !important;
+}
+
+/* General container style - ensure this doesn't conflict with login-page centering */
+/* If this .container was specifically for dashboards, it's fine. For login, we use a specific approach. */
+/* If you want all containers to have max-width, keep this. The login page's container is handled by flexbox. */
+.container {
+    max-width: 960px; /* Example: default max-width for other content */
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+}
+
+/* General card style - will be applied to login-card unless overridden */
+.card {
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    border-radius: 8px 8px 0 0;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.list-group {
+    list-style: none;
+    padding: 0;
+}
+
+.list-group-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.badge {
+    font-weight: bold;
+    padding: 0.5em 0.8em;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+    color: white;
+}
+
+.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529;
+}
+
+/* General btn-primary - ensure login-card .btn-primary overrides this for specific login styling */
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.8rem 1.2rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s ease;
+}
+
+.btn-success:hover {
+    background-color: #1e7e34;
+}
+
+/* General form-control - login-card .form-control will override */
+.form-control {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.alert {
+    padding: 1rem;
+    margin-top: 1rem;
+    border-radius: 4px;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Specific styles for admin dashboard */
+.admin-summary-card {
+    background-color: #e9ecef;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.admin-summary-card h5 {
+    color: #007bff;
+    margin-bottom: 1rem;
+}
+
+.user-list-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-list-item:last-child {
+    border-bottom: none;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 4px;
+}
+
+/* Icons */
+.fas {
+    margin-right: 0.5rem;
+}
+
+.card-body h5.card-title {
+    color: #007bff;
+    margin-bottom: 1rem;
+    font-weight: bold;
+}
+
+.card-body .fa-coins,
+.card-body .fa-users-cog,
+.card-body .fa-money-bill-alt {
+    margin-right: 0.5rem;
+    color: #007bff;
+}
+
+.card-body p.card-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #28a745;
+}

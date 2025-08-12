@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CESA Login/Register</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Minimal styles for demonstration. You can expand styles.css */
+        .login-body {
+            background: url('college.png') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-card {
+            max-width: 500px;
+            width: 100%;
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+        }
+        .login-card h2 {
+            color: #333;
+            font-weight: 700;
+        }
+        .form-control-lg {
+            border-radius: 8px;
+        }
+        .btn-primary, .btn-success {
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .nav-tabs .nav-link {
+            border-radius: 10px 10px 0 0;
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: bold;
+        }
+        .nav-tabs .nav-link.active {
+            background-color: #fff;
+            border-color: #dee2e6 #dee2e6 #fff;
+            color: #007bff;
+        }
+        /* Specific styles for message alerts */
+        .alert {
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+
+<body class="login-body">
+    <div class="d-flex justify-content-center align-items-center min-vh-100">
+        <div class="card login-card p-4 shadow">
+            <div class="text-center mb-4">
+                <img src="kbp.png" alt="CESA Logo" class="mb-3" style="max-width: 120px;">
+                <h2><i class="fas fa-desktop me-2"></i>Welcome To CESA Funds</h2>
+            </div>
+
+            <ul class="nav nav-tabs nav-justified mb-4" id="authTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-tab-pane" type="button" role="tab" aria-controls="login-tab-pane" aria-selected="true">Login</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-tab-pane" type="button" role="tab" aria-controls="register-tab-pane" aria-selected="false">Register</button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="authTabContent">
+                <div class="tab-pane fade show active" id="login-tab-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
+                    <form id="loginForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">PRN/Email:</label>
+                            <input type="text" id="username" name="username" required class="form-control form-control-lg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password:</label>
+                            <input type="password" id="password" name="password" required class="form-control form-control-lg">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mt-3"><i class="fas fa-arrow-right me-2"></i> Login</button>
+                        <div id="login-error" class="alert alert-danger mt-3" style="display: none;"></div>
+                        <div class="text-center mt-3">
+                            <a href="forgot_password.html" class="text-muted text-decoration-none">Forgot Password?</a>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="tab-pane fade" id="register-tab-pane" role="tabpanel" aria-labelledby="register-tab" tabindex="0">
+                    <form id="registerForm">
+                        <div class="mb-3">
+                            <label for="regFullName" class="form-label">Full Name:</label>
+                            <input type="text" id="regFullName" name="fullName" required class="form-control form-control-lg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="regPRN" class="form-label">PRN:</label>
+                            <input type="text" id="regPRN" name="prn" required class="form-control form-control-lg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="regEmail" class="form-label">Email:</label>
+                            <input type="email" id="regEmail" name="email" required class="form-control form-control-lg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="regPassword" class="form-label">Password:</label>
+                            <input type="password" id="regPassword" name="password" required class="form-control form-control-lg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="regConfirmPassword" class="form-label">Confirm Password:</label>
+                            <input type="password" id="regConfirmPassword" name="confirmPassword" required class="form-control form-control-lg">
+                        </div>
+                        <div class="mb-3">
+                            <label for="regDepartment" class="form-label">Department:</label>
+                            <select id="regDepartment" name="department" class="form-select form-select-lg" required>
+                                <option value="">Select Department</option>
+                                <option value="CSE">CSE</option>
+                                
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="regYear" class="form-label">Year:</label>
+                            <select id="regYear" name="year" class="form-select form-select-lg" required>
+                                <option value="">Select Year</option>
+                                <option value="SY">SY</option>
+                                <option value="TY">TY</option>
+                                <option value="BTECH">BTECH</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg w-100 mt-3"><i class="fas fa-user-plus me-2"></i> Register</button>
+                        <div id="register-error" class="alert alert-danger mt-3" style="display: none;"></div>
+                        <div id="register-success" class="alert alert-success mt-3" style="display: none;"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Get references to HTML elements
+        const loginForm = document.getElementById('loginForm');
+        const loginErrorDiv = document.getElementById('login-error');
+        const registerForm = document.getElementById('registerForm');
+        const registerErrorDiv = document.getElementById('register-error');
+        const registerSuccessDiv = document.getElementById('register-success');
+
+        // --- Login Form Logic ---
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (e) => {
+                e.preventDefault(); // Prevent default form submission
+
+                // Clear previous error messages and hide them
+                loginErrorDiv.style.display = 'none';
+                loginErrorDiv.textContent = '';
+
+                // Get values from login form inputs
+                const emailOrPrn = loginForm.username.value.trim(); // This input takes either email or PRN
+                const password = loginForm.password.value;
+
+                // Basic client-side validation
+                if (!emailOrPrn || !password) {
+                    loginErrorDiv.textContent = 'Please enter both PRN/Email and Password.';
+                    loginErrorDiv.style.display = 'block';
+                    return;
+                }
+
+                try {
+                    // Make a POST request to your API's login endpoint
+                    const response = await fetch('api.php?action=login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json' // Tell the server we're sending JSON
+                        },
+                        // Send credentials as JSON in the request body
+                        body: JSON.stringify({ email: emailOrPrn, password: password })
+                    });
+
+                    // Attempt to parse the response as JSON, regardless of status
+                    const data = await response.json();
+
+                    // Check if the HTTP response status is not OK (e.g., 401, 400, 500)
+                    if (!response.ok) {
+                        // Throw an error with the message from the API or a generic one
+                        throw new Error(data.error || `Login failed with status: ${response.status}`);
+                    }
+
+                    // If login was successful (response.ok is true)
+                    if (data.token && data.user) { // Ensure token and user data are present in the response
+                        // Store the received token in localStorage for future authenticated requests
+                        localStorage.setItem('userToken', data.token);
+                        // Store other user data if needed (e.g., for display on dashboard)
+                        localStorage.setItem('currentUser', JSON.stringify(data.user));
+
+                        console.log('--- localStorage Debugging ---');
+                        console.log('Token received from API:', data.token);
+                        console.log('User data received from API:', data.user);
+                        console.log('Token stored in localStorage:', localStorage.getItem('userToken'));
+                        console.log('User data stored in localStorage:', localStorage.getItem('currentUser'));
+                        console.log('Type of data.token:', typeof data.token);
+                        console.log('Length of data.token:', data.token ? data.token.length : 'N/A');
+
+                        // Redirect based on user role and status
+                        switch (data.user.role) {
+                           case 'student':
+                                if (data.user.status === 'active') {
+                                   window.location.href = 'student_dashboard.html';
+                                } else if (data.user.status === 'pending') {
+                                    loginErrorDiv.textContent = 'Your registration is pending approval by the HOD. Please wait.';
+                                    loginErrorDiv.style.display = 'block';
+                                    // Do NOT redirect, keep them on login page with message
+                                } else if (data.user.status === 'denied') {
+                                    loginErrorDiv.textContent = 'Your registration has been denied. Please contact the administrator.';
+                                    loginErrorDiv.style.display = 'block';
+                                    // Do NOT redirect
+                                } else {
+                                    loginErrorDiv.textContent = 'Unknown account status. Please contact support.';
+                                    loginErrorDiv.style.display = 'block';
+                                    // Do NOT redirect
+                                }
+                                break;
+                            case 'teacher':
+                                // For now, assuming teachers go to admin_dashboard or a separate teacher_dashboard
+                                // You might need a teacher_dashboard.html similarly
+                                if (data.user.status === 'active') {
+                                    window.location.href = 'teacher_dashboard.html'; // Create this if needed
+                                } else {
+                                    loginErrorDiv.textContent = 'Your teacher account status is not active. Please contact administration.';
+                                    loginErrorDiv.style.display = 'block';
+                                }
+                                break;
+                            case 'admin':
+                                if (data.user.status === 'active') {
+                                    window.location.href = 'admin_dashboard.html';
+                                } else if (data.user.status === 'pending') {
+                                    loginErrorDiv.textContent = 'Your admin account is pending activation. Please contact the super-administrator.';
+                                    loginErrorDiv.style.display = 'block';
+                                } else {
+                                    loginErrorDiv.textContent = 'Unknown admin account status. Please contact support.';
+                                    loginErrorDiv.style.display = 'block';
+                                }
+                                break;
+                            default:
+                                throw new Error('Unknown user role received. Please contact support.');
+                        }
+
+                    } else {
+                        // This case handles a successful HTTP response but missing token/user data in JSON
+                        throw new Error('Login response incomplete: No token or user data received from API.');
+                    }
+
+                } catch (error) {
+                    // Catch any errors during fetch or from API response
+                    console.error('Login error:', error);
+                    loginErrorDiv.textContent = error.message;
+                    loginErrorDiv.style.display = 'block';
+                }
+            });
+        }
+
+        // --- Registration Form Logic ---
+        if (registerForm) {
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Clear previous messages
+                registerErrorDiv.style.display = 'none';
+                registerSuccessDiv.style.display = 'none';
+                registerErrorDiv.textContent = '';
+                registerSuccessDiv.textContent = '';
+
+                // Get values from registration form inputs
+                const fullName = registerForm.regFullName.value.trim();
+                const prn = registerForm.regPRN.value.trim();
+                const email = registerForm.regEmail.value.trim();
+                const password = registerForm.regPassword.value;
+                const confirmPassword = registerForm.regConfirmPassword.value;
+                const department = registerForm.regDepartment.value;
+                const year = registerForm.regYear.value;
+
+                // Client-side validation
+                if (!fullName || !prn || !email || !password || !confirmPassword || !department || !year) {
+                    registerErrorDiv.textContent = 'All fields are required.';
+                    registerErrorDiv.style.display = 'block';
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    registerErrorDiv.textContent = 'Passwords do not match.';
+                    registerErrorDiv.style.display = 'block';
+                    return;
+                }
+
+                if (password.length < 6) {
+                    registerErrorDiv.textContent = 'Password must be at least 6 characters long.';
+                    registerErrorDiv.style.display = 'block';
+                    return;
+                }
+
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                    registerErrorDiv.textContent = 'Please enter a valid email address.';
+                    registerErrorDiv.style.display = 'block';
+                    return;
+                }
+
+                if (!/^[a-zA-Z0-9]+$/.test(prn)) {
+                    registerErrorDiv.textContent = 'PRN should contain only alphanumeric characters.';
+                    registerErrorDiv.style.display = 'block';
+                    return;
+                }
+
+                try {
+                    // Make a POST request to your API's register_student endpoint
+                    const response = await fetch('api.php?action=register_student', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            fullName,
+                            prn,
+                            email,
+                            password,
+                            department,
+                            year
+                        })
+                    });
+
+                    const result = await response.json(); // Parse the response
+
+                    // Check for success based on HTTP status and the 'success' field in JSON
+                    if (response.ok && result.success) {
+                        registerSuccessDiv.textContent = result.message || 'Registration successful! Your account is pending approval by the HOD.';
+                        registerSuccessDiv.style.display = 'block';
+                        registerForm.reset(); // Clear the form fields
+                    } else {
+                        // Throw an error if registration failed
+                        throw new Error(result.error || 'Registration failed. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Registration error:', error);
+                    registerErrorDiv.textContent = error.message;
+                    registerErrorDiv.style.display = 'block';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

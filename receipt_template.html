@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Receipt</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            background: #fff;
+        }
+        .receipt-container {
+            width: 21cm;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 20px;
+        }
+        .college-logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .college-name {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 5px 0;
+            text-transform: uppercase;
+        }
+        .college-info {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .receipt-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 15px 0 5px;
+            text-decoration: underline;
+        }
+        .receipt-header {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .receipt-body {
+            margin: 20px 0;
+            font-size: 14px;
+        }
+        .info-row {
+            display: flex;
+            margin: 10px 0;
+            border-bottom: 1px dotted #ccc;
+            padding: 5px 0;
+        }
+        .label {
+            width: 150px;
+            font-weight: bold;
+        }
+        .value {
+            flex: 1;
+        }
+        .amount-in-words {
+            margin: 20px 0;
+            font-style: italic;
+            padding: 10px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+        .original-copy {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            .receipt-container {
+                width: 100%;
+                border: none;
+                padding: 20px;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt-container">
+        <div class="original-copy">Original Copy</div>
+        <div class="header">
+            <img src="kbp.png" alt="College Logo" class="college-logo">
+            <div class="college-name">KBP College of Engineering, Satara</div>
+            <div class="college-info">Satara, Maharashtra</div>
+            <div class="receipt-title">RECEIPT</div>
+        </div>
+
+        <div class="receipt-header">
+            <div>
+                <div><strong>Receipt No:</strong> {{receipt_number}}</div>
+                <div><strong>Date:</strong> {{receipt_date}}</div>
+            </div>
+            <div>
+                <div><strong>Email:</strong> {{student_email}}</div>
+            </div>
+        </div>
+
+        <div class="receipt-body">
+            <div class="info-row">
+                <div class="label">Received From:</div>
+                <div class="value">{{student_name}}</div>
+            </div>
+            <div class="info-row">
+                <div class="label">PRN Number:</div>
+                <div class="value">{{prn_number}}</div>
+            </div>
+            <div class="info-row">
+                <div class="label">Branch:</div>
+                <div class="value">{{department}}</div>
+            </div>
+            <div class="info-row">
+                <div class="label">Amount:</div>
+                <div class="value">₹{{amount}}</div>
+            </div>
+            <div class="info-row">
+                <div class="label">Payment Method:</div>
+                <div class="value">{{payment_method}}</div>
+            </div>
+            <div class="info-row">
+                <div class="label">Transaction ID:</div>
+                <div class="value">{{transaction_id}}</div>
+            </div>
+          
+
+            <div class="amount-in-words">
+                <strong>Amount in words:</strong> {{amount_in_words}} Only
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>This is a computer-generated receipt. No signature is required.</p>
+        </div>
+    </div>
+    <div class="no-print" style="text-align: center; margin-top: 20px;">
+        <button onclick="window.print()">Print Receipt</button>
+    </div>
+</body>
+</html> 

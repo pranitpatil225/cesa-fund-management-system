@@ -1,0 +1,73 @@
+# CESA Fund Management System - Git Ignore File
+
+# Sensitive Configuration Files (NEVER commit these!)
+config.php
+production_config.php
+db_connect.php
+.env
+
+# Database Files
+*.sql
+*.db
+
+# Log Files
+*.log
+logs/
+php_errors.log
+error.log
+
+# Uploaded Files
+uploads/*
+!uploads/.gitkeep
+
+# Vendor Dependencies (optional - can be committed for easier setup)
+# vendor/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Generated Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary Files
+*.tmp
+*.temp
+*.cache
+
+# Backup Files
+*.bak
+*.backup
+*.old
+
+# Environment Files
+.env.local
+.env.production
+.env.staging
+
+# Composer
+composer.lock
+composer.phar
+
+# Node (if using any frontend build tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+/tests/coverage/
+.phpunit.result.cache
+
+# Build Output
+/build/
+/dist/ 
